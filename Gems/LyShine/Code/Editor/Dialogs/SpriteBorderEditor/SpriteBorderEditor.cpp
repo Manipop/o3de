@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QString>
+#include <QRegularExpression>
 
 namespace
 {
@@ -747,8 +748,9 @@ void SpriteBorderEditor::AddPropertiesSection(QGridLayout* gridLayout, int& rowN
                     const QString lineEditText = m_cellAliasLineEdit->text().simplified();
 
                     // Only allow alphanumeric and whitespace chars
-                    QRegExp re("([A-Z]|[a-z]|[0-9]|\\s)*");
-                    const bool containsOnlyAlphaNumeric = re.exactMatch(lineEditText);
+                    QRegularExpression re("([A-Z]|[a-z]|[0-9]|\\s)*");
+                    QRegularExpressionMatch match = re.match(lineEditText);
+                    const bool containsOnlyAlphaNumeric = match.hasMatch() && match.capturedLength() == lineEditText.length();
                     const bool hasValidLength = lineEditText.length() <= 128;
                     const bool lineEditTextValid = containsOnlyAlphaNumeric && hasValidLength;
                     if (lineEditTextValid)
